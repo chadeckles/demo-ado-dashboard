@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoDash", "AdoDash\AdoDash.csproj", "{182283FF-EF7F-40FB-9A23-5BAD350DD928}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoDash.Tests", "AdoDash\AdoDash.Tests.csproj", "{182283FF-EF7F-40FB-9A23-5BAD350DD928}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
