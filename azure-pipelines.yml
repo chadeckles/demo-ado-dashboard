@@ -27,8 +27,19 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    
+ #need to use the vso tasks so that the env variables persist trhough tasks in ADO
+- powershell: |
+   Write-Host "Our Sauce Username in ADO is=> $($env:SAUCE_USER)";
+   Write-Host "Our Sauce Access Key in ADO is=> $($env:SAUCE_KEY)";
+   Write-Host "System.DefaultWorkingDirectory=>$(System.DefaultWorkingDirectory)"
+   Write-Host "Build.ArtifactStagingDirectory=>$(Build.ArtifactStagingDirectory)"
+   Write-Host ("##vso[task.setvariable variable=SAUCE_USERNAME]$($env:SAUCE_USER)")
+   Write-Host ("##vso[task.setvariable variable=SAUCE_ACCESS_KEY]$($env:SAUCE_KEY)")
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: test
+    projects: '**/*Test/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
