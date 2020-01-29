@@ -24,7 +24,6 @@ steps:
 - script: set
   displayName: Show all variables
 
-steps:
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
