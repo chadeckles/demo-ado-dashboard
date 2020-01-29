@@ -10,9 +10,13 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+- group: sauce-labs-variables
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -27,8 +31,25 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    
+ #need to use the vso tasks so that the env variables persist trhough tasks in ADO
+- powershell: |
+   Write-Host "Our Sauce Username in ADO is=> $($env:SAUCE_USER)";
+   Write-Host "Our Sauce Access Key in ADO is=> $($env:SAUCE_KEY)";
+   Write-Host "System.DefaultWorkingDirectory=>$(System.DefaultWorkingDirectory)"
+   Write-Host "Build.ArtifactStagingDirectory=>$(Build.ArtifactStagingDirectory)"
+   Write-Host ("##vso[task.setvariable variable=SAUCE_USERNAME]$($env:SAUCE_USER)")
+   Write-Host ("##vso[task.setvariable variable=SAUCE_ACCESS_KEY]$($env:SAUCE_KEY)")
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
+  inputs:
+    command: test
+    projects: '**/*Test/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: VSTest@2
+  displayName: 'Selenium Tests'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    testAssemblyVer2: '**\$(BuildConfiguration)\**\*.Tests.dll'
+    uiTests: true
