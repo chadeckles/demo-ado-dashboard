@@ -47,3 +47,9 @@ steps:
     command: test
     projects: '**/*Test/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
+
+- task: VSTest@2
+  displayName: 'Selenium Tests'
+  inputs:
+    testAssemblyVer2: '**\$(BuildConfiguration)\**\*.Tests.dll'
+    uiTests: true
