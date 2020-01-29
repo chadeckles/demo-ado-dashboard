@@ -41,13 +41,6 @@ steps:
    Write-Host ("##vso[task.setvariable variable=SAUCE_USERNAME]$($env:SAUCE_USER)")
    Write-Host ("##vso[task.setvariable variable=SAUCE_ACCESS_KEY]$($env:SAUCE_KEY)")
 
-- task: DotNetCoreCLI@2
-  displayName: 'Run tests'
-  inputs:
-    command: test
-    projects: '**/*Test/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-
 - task: VSTest@2
   displayName: 'Selenium Tests'
   inputs:
