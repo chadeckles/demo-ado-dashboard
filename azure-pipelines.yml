@@ -17,6 +17,12 @@ variables:
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
+  
+#Excellent docs on .NET Core steps: 
+#https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops#feedback
+steps:
+- script: set
+  displayName: Show all variables
 
 steps:
 - task: NuGetToolInstaller@1
