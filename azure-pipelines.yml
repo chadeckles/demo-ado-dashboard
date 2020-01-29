@@ -23,6 +23,9 @@ variables:
 steps:
 - script: set
   displayName: Show all variables
+  
+- powershell: ./ setEnvironmentVariables.ps1 
+  arguments: '$env:SAUCE_USERNAME $env:SAUCE_ACCESSKEY'
 
 steps:
 - task: NuGetToolInstaller@1
