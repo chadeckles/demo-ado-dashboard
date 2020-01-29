@@ -35,8 +35,8 @@ steps:
     configuration: '$(buildConfiguration)'
     
  #need to use the vso tasks so that the env variables persist trhough tasks in ADO
- - powershell: ./ setEnvironmentVariables.ps1 
-   arguments: '$env:SAUCE_USERNAME $env:SAUCE_ACCESSKEY'
+ #- powershell: ./ setEnvironmentVariables.ps1 
+ #  arguments: '$env:SAUCE_USERNAME $env:SAUCE_ACCESSKEY'
 
 - task: VSTest@2
   displayName: 'Selenium Tests'
