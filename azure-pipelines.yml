@@ -23,9 +23,6 @@ variables:
 steps:
 - script: set
   displayName: Show all variables
-  
-- powershell: ./ setEnvironmentVariables.ps1 
-  arguments: '$env:SAUCE_USERNAME $env:SAUCE_ACCESSKEY'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -42,13 +39,8 @@ steps:
     configuration: '$(buildConfiguration)'
     
  #need to use the vso tasks so that the env variables persist trhough tasks in ADO
-- powershell: |
-   Write-Host "Build.ArtifactStagingDirectory=>$(Build.ArtifactStagingDirectory)"
-   Write-Host ("##vso[task.setvariable variable=SAUCE_USERNAME]$($env:SAUCE_USER)")
-   Write-Host ("##vso[task.setvariable variable=SAUCE_ACCESS_KEY]$($env:SAUCE_KEY)")
-   Write-Host "Our Sauce Username in ADO is=> $($env:SAUCE_USER)";
-   Write-Host "Our Sauce Access Key in ADO is=> $($env:SAUCE_KEY)";
-   Write-Host "System.DefaultWorkingDirectory=>$(System.DefaultWorkingDirectory)"
+ - powershell: ./ setEnvironmentVariables.ps1 
+   arguments: '$env:SAUCE_USERNAME $env:SAUCE_ACCESSKEY'
 
 - task: VSTest@2
   displayName: 'Selenium Tests'
