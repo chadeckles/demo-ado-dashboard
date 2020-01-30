@@ -13,28 +13,25 @@ namespace AdoDash
     [TestClass]
     public class OfficeTests
     {
-        private Dictionary<string, object> sauceOptions;
         private IWebDriver _driver;
-        private ChromeOptions chromeOptions;
+        private ChromeOptions _chromeOptions;
 
         public TestContext TestContext { get; set; }
-        public string sauceUserName { get; private set; }
-        public string sauceAccessKey { get; private set; }
+        public string SauceUserName { get; private set; }
+        public string SauceAccessKey { get; private set; }
 
         [TestMethod]
         public void ShouldOpen()
         {
             var sauceOptions = new Dictionary<string, object>
             {
-                ["username"] = sauceUserName,
-                ["accessKey"] = sauceAccessKey,
-                ["name"] = TestContext.TestName,
-                ["extendedDebugging"] = true,
-                ["capturePerformance"] = true
+                ["username"] = SauceUserName,
+                ["accessKey"] = SauceAccessKey,
+                ["name"] = TestContext.TestName
             };
-            chromeOptions.AddAdditionalOption("sauce:options", sauceOptions);
+            _chromeOptions.AddAdditionalOption("sauce:options", sauceOptions);
             _driver = new RemoteWebDriver(new Uri("https://ondemand.saucelabs.com/wd/hub"),
-                chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(600));
+                _chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(600));
 
             _driver.Navigate().GoToUrl("https://www.office.com/?auth=1");
 
@@ -65,15 +62,15 @@ namespace AdoDash
         {
             var sauceOptions = new Dictionary<string, object>
             {
-                ["username"] = sauceUserName,
-                ["accessKey"] = sauceAccessKey,
+                ["username"] = SauceUserName,
+                ["accessKey"] = SauceAccessKey,
                 ["name"] = TestContext.TestName,
                 ["extendedDebugging"] = true,
                 ["capturePerformance"] = true
             };
-            chromeOptions.AddAdditionalOption("sauce:options", sauceOptions);
+            _chromeOptions.AddAdditionalOption("sauce:options", sauceOptions);
             _driver = new RemoteWebDriver(new Uri("https://ondemand.saucelabs.com/wd/hub"),
-                chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(600));
+                _chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(600));
 
             _driver.Navigate().GoToUrl("https://www.office.com/?auth=1");
         }
@@ -81,10 +78,10 @@ namespace AdoDash
         public void SetupTests()
         {
             //TODO please supply your Sauce Labs user name in an environment variable
-            sauceUserName = Environment.GetEnvironmentVariable("SAUCE_USERNAME", EnvironmentVariableTarget.User);
+            SauceUserName = Environment.GetEnvironmentVariable("SAUCE_USERNAME", EnvironmentVariableTarget.User);
             //TODO please supply your own Sauce Labs access Key in an environment variable
-            sauceAccessKey = Environment.GetEnvironmentVariable("SAUCE_ACCESS_KEY", EnvironmentVariableTarget.User);
-            chromeOptions = new ChromeOptions()
+            SauceAccessKey = Environment.GetEnvironmentVariable("SAUCE_ACCESS_KEY", EnvironmentVariableTarget.User);
+            _chromeOptions = new ChromeOptions()
             {
                 BrowserVersion = "latest",
                 PlatformName = "Windows 10",
