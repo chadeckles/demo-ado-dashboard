@@ -19,7 +19,7 @@ namespace AdoDash
         public string SauceAccessKey { get; private set; }
 
         [TestMethod]
-        public void ShouldOpen()
+        public void ShouldLogin()
         {
             var sauceOptions = new Dictionary<string, object>
             {
