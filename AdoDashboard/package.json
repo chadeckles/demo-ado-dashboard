@@ -1,0 +1,12 @@
+{
+  "name": "nodejs.tests",
+  "version": "0.0.0",
+  "description": "Nodejs.Tests",
+  "main": "app.js",
+  "author": {
+    "name": "Nikolay Advolodkin"
+  },
+  "scripts": {
+    "test-screener": "screener-runner --conf screener.config.js"
+  }
+}
