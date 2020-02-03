@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
-using OpenQA.Selenium.Support.UI;
-using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
 namespace AdoDash
 {
@@ -31,31 +29,33 @@ namespace AdoDash
             };
             _chromeOptions.AddAdditionalOption("sauce:options", sauceOptions);
             _driver = new RemoteWebDriver(new Uri("https://ondemand.saucelabs.com/wd/hub"),
-                _chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(600));
+                _chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(30));
 
-            _driver.Navigate().GoToUrl("https://www.office.com/?auth=1");
+            var officePage = new OfficePage(_driver);
+            officePage.GoTo();
+            officePage.Login();
+            officePage.IsLoaded().Should().BeTrue("we tried to login to the office application");
+        }
+        [TestMethod]
+        public void ShouldHaveOneNote()
+        {
+            var sauceOptions = new Dictionary<string, object>
+            {
+                ["username"] = SauceUserName,
+                ["accessKey"] = SauceAccessKey,
+                ["name"] = TestContext.TestName
+            };
+            _chromeOptions.AddAdditionalOption("sauce:options", sauceOptions);
+            _driver = new RemoteWebDriver(new Uri("https://ondemand.saucelabs.com/wd/hub"),
+                _chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(30));
 
-            var user = Environment.GetEnvironmentVariable("365_USER", 
-                EnvironmentVariableTarget.User);
-            var pass = Environment.GetEnvironmentVariable("365_PASS", 
-                EnvironmentVariableTarget.User);
+            var officePage = new OfficePage(_driver);
+            officePage.GoTo();
+            officePage.Login();
+            officePage.IsLoaded().Should().BeTrue("we tried to login to the office application");
 
-            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
-            var userName = wait.Until(
-                ExpectedConditions.ElementIsVisible(By.Id("i0116")));
-            userName.SendKeys(user);
-
-            var button = wait.Until(
-                ExpectedConditions.ElementIsVisible(By.Id("idSIButton9")));
-            button.Click();
-
-            var password = wait.Until(
-                ExpectedConditions.ElementIsVisible(By.Id("i0118")));
-            password.SendKeys(pass);
-
-            button = wait.Until(
-                ExpectedConditions.ElementIsVisible(By.Id("idSIButton9")));
-            button.Click();
+            var officeHomePage = new OfficeHomePage(_driver);
+            officeHomePage.OneNote.Displayed.Should().BeTrue();
         }
         [TestMethod]
         public void PerformanceTest()
@@ -70,7 +70,7 @@ namespace AdoDash
             };
             _chromeOptions.AddAdditionalOption("sauce:options", sauceOptions);
             _driver = new RemoteWebDriver(new Uri("https://ondemand.saucelabs.com/wd/hub"),
-                _chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(600));
+                _chromeOptions.ToCapabilities(), TimeSpan.FromSeconds(30));
 
             _driver.Navigate().GoToUrl("https://www.office.com/?auth=1");
         }
